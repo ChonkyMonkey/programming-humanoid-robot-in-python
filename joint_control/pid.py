@@ -30,7 +30,7 @@ class PIDController(object):
         @param delay: delay in number of steps
         '''
         self.dt = dt
-        self.u = np.zeros(size)
+        self.u = np.zeros(size)     #speed in rad/time for the sensor
         self.e1 = np.zeros(size)
         self.e2 = np.zeros(size)
         # ADJUST PARAMETERS BELOW
@@ -38,7 +38,7 @@ class PIDController(object):
         self.Kp = 0
         self.Ki = 0
         self.Kd = 0
-        self.y = deque(np.zeros(size), maxlen=delay + 1)
+        self.y = deque(maxlen=delay + 1)    #removed the zeros because linting assumed type of elements in y wrong later
 
     def set_delay(self, delay):
         '''
@@ -53,7 +53,34 @@ class PIDController(object):
         @return control signal
         '''
         # YOUR CODE HERE
+        # y = self.y
+        # u = self.u
+        # Kp = self.Kp
+        # Ki = self.Ki
+        # Kd = self.Kd
+        # dt = self.dt
+        # e1 = self.e1   #(actually e_-1)
+        # e2 = self.e2   #(actually e_-2)
 
+        # if len(y) == 0:
+        #     y.append(sensor.copy())   #correctly initialize y
+
+        # #Prediction
+        # y_last = y[-1]
+        # y_next = y_last + u * dt  #idk why its called y, but this stores the angles
+        # y.append(y_next)               #buffer model prediction
+        # # calculate errror                  #y[0] should contain the model prediction for the current state
+        # y_model = y[0]
+        # e = target - y_model
+
+        # #PID-Calculation like lec. 2 p. 7
+        # u = u + (Kp + Ki * dt + Kd/dt) * e - (Kp + (2*Kd)/dt) * e1 + (Kd/dt) * e2
+
+        # #update errors
+        # self.e2 = self.e1
+        # self.e1 = e
+
+        # self.u = u
         return self.u
 
 
@@ -85,5 +112,5 @@ class PIDAgent(SparkAgent):
 
 if __name__ == '__main__':
     agent = PIDAgent()
-    agent.target_joints['HeadYaw'] = 1.0
+    agent.target_joints['HeadYaw'] = 1
     agent.run()
