@@ -53,34 +53,34 @@ class PIDController(object):
         @return control signal
         '''
         # YOUR CODE HERE
-        # y = self.y
-        # u = self.u
-        # Kp = self.Kp
-        # Ki = self.Ki
-        # Kd = self.Kd
-        # dt = self.dt
-        # e1 = self.e1   #(actually e_-1)
-        # e2 = self.e2   #(actually e_-2)
+        y = self.y
+        u = self.u
+        Kp = self.Kp
+        Ki = self.Ki
+        Kd = self.Kd
+        dt = self.dt
+        e1 = self.e1   #(actually e_-1)
+        e2 = self.e2   #(actually e_-2)
 
-        # if len(y) == 0:
-        #     y.append(sensor.copy())   #correctly initialize y
 
-        # #Prediction
-        # y_last = y[-1]
-        # y_next = y_last + u * dt  #idk why its called y, but this stores the angles
-        # y.append(y_next)               #buffer model prediction
-        # # calculate errror                  #y[0] should contain the model prediction for the current state
-        # y_model = y[0]
-        # e = target - y_model
+        #Compute error
+        y_model = y[0] if len(y) > 0 else sensor.copy()
+        e = target - y_model
 
-        # #PID-Calculation like lec. 2 p. 7
-        # u = u + (Kp + Ki * dt + Kd/dt) * e - (Kp + (2*Kd)/dt) * e1 + (Kd/dt) * e2
+        #PID-Calculation like lec. 2 p. 7
+        u = u + (Kp + Ki * dt + Kd/dt) * e - (Kp + (2*Kd)/dt) * e1 + (Kd/dt) * e2
 
-        # #update errors
-        # self.e2 = self.e1
-        # self.e1 = e
 
-        # self.u = u
+        #Make prediction
+        y_last = y[-1] if len(y) > 0 else sensor.copy()
+        y_next = y_last + u * dt
+        y.append(y_next)
+
+        #update errors
+        self.e2 = self.e1
+        self.e1 = e
+
+        self.u = u
         return self.u
 
 
